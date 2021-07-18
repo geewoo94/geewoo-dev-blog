@@ -5,13 +5,18 @@ const googleAnalyticsTrackingId = process.env.GOOGLE_ANALYTICS_ID
 
 module.exports = {
   siteMetadata: {
-    siteTitleAlt: `Minimal Blog - Gatsby Theme`,
+    siteTitle: `Geewoo`,
+    siteTitleAlt: `geewoo dev blog`,
+    siteHeadline: `geewoo dev blog`,
+    siteUrl: `https://blog.geewoo.dev`,
+    author: `geewoo`,
   },
   plugins: [
     {
-      resolve: `@lekoarts/gatsby-theme-minimal-blog`,
+      resolve: `./custom-resolver`,
       // See the theme's README for all available options
       options: {
+        formatString: "YYYY-MM-DD",
         navigation: [
           {
             title: `Blog`,
@@ -20,16 +25,6 @@ module.exports = {
           {
             title: `About`,
             slug: `/about`,
-          },
-        ],
-        externalLinks: [
-          {
-            name: `Twitter`,
-            url: `https://twitter.com/lekoarts_de`,
-          },
-          {
-            name: `Homepage`,
-            url: `https://www.lekoarts.de?utm_source=minimal-blog&utm_medium=Starter`,
           },
         ],
       },
@@ -59,9 +54,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
-        name: `minimal-blog - @lekoarts/gatsby-theme-minimal-blog`,
-        short_name: `minimal-blog`,
-        description: `Typography driven, feature-rich blogging theme with minimal aesthetics. Includes tags/categories support and extensive features for code blocks such as live preview, line numbers, and code highlighting.`,
+        name: `geewoo dev blog`,
+        short_name: `geewoo blog`,
+        description: `geewoo dev blog`,
         start_url: `/`,
         background_color: `#fff`,
         theme_color: `#6B46C1`,
@@ -100,10 +95,10 @@ module.exports = {
         `,
         feeds: [
           {
-            serialize: ({ query: { site, allPost } }) =>
-              allPost.nodes.map((post) => {
-                const url = site.siteMetadata.siteUrl + post.slug
-                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`
+            serialize: ({ query: { site, allPost } }) => {
+              return allPost.nodes.map((post) => {
+                const url = site.siteMetadata.siteUrl + post.slug;
+                const content = `<p>${post.excerpt}</p><div style="margin-top: 50px; font-style: italic;"><strong><a href="${url}">Keep reading</a>.</strong></div><br /> <br />`;
 
                 return {
                   title: post.title,
@@ -111,9 +106,9 @@ module.exports = {
                   excerpt: post.excerpt,
                   url,
                   guid: url,
-                  custom_elements: [{ "content:encoded": content }],
-                }
-              }),
+                  custom_elements: [{ 'content:encoded': content }],
+                };
+              })},
             query: `
               {
                 allPost(sort: { fields: date, order: DESC }) {
@@ -141,4 +136,4 @@ module.exports = {
       },
     },
   ].filter(Boolean),
-}
+};

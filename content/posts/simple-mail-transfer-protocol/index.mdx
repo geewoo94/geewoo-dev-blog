@@ -1,0 +1,116 @@
+---
+title: "Simple Mail Transfer Protocol"
+date: 2021-07-18
+slug: "/simple-mail-transfer-protocol"
+canonicalUrl: "https://picsum.photos/1200"
+tags:
+  - Research
+---
+
+# SMTP(simple mail transfer protocol) - 2021.07.18
+
+# SMTP
+
+2021.07.18
+
+이 글은 네트워크에서 어떻게 mail을 주고 받는지에 대해 조사한 글입니다.
+
+## 목차
+
+1. 개요
+2. 프로토콜 설명
+3. 사용법
+4. 기타사항
+5. 마치며
+
+## 개요
+
+email시스템은 네트워크가 생겨난 이래 가장 많이 사용 되는 서비스중 하나입니다. 과거에도 물론이고 현재도 그 간편성 때문에 많이 사용 되고있습니다. 평소에 어떻게 email을 주고 받는지 궁금증은 갖고 있었지만 기회가 되지 않아 조사를 미루고 있었지만 이번에 회사에서 email을 주고 받을 필요가 있어서 조사할 수 있게 되었습니다. 조사하는 도중 email은 거의 대부분 smtp를 사용해서 메일을 주고 받음을 알게 되었습니다.
+
+그럼 도대체 네트워크는 어떻게 email을 전달하고 받을 수 있는걸까?
+
+## 프로토콜 설명
+
+**wiki**에서 smtp를 다음과 같이 정의하고 있습니다.
+
+> *The Simple Mail Transfer Protocol (SMTP) is an internet standard communication protocol for electronic mail transmission.*
+
+**tcp/ip 4 layer**에서 smpt는 4 layer인 **application layer**에서 사용되는 프로토콜입니다. http, https와 같은 레벨에서의 프로토콜이라는 말이죠.
+
+![https://www.distributednetworks.com/network-security-firewalls/module4/images/tcp-ip-stack.gif](https://www.distributednetworks.com/network-security-firewalls/module4/images/tcp-ip-stack.gif)
+
+**tcp layer**에서 에서 http는 80번 포트를 사용하고 있고, https는 443포트를 기본적으로 사용하고 있습니다. smtp는 25번 포트, 또는 암호화된 통신은 587번 포트를 일반적으로 사용하고 있습니다.
+
+서버와 응답을 주고받는 방식은 다음과 같습니다.
+
+![http://acl.ece.arizona.edu/projects/old/ANDSMTP/imgs/SMTP.jpg](http://acl.ece.arizona.edu/projects/old/ANDSMTP/imgs/SMTP.jpg)
+
+smtp에서 부족한 점을 보완하기 위해 esmtp라는 형식도 나오게 되었는데, 통신하는 과정중 보안에 관련된 부분을 추가로 통신하기도 하고 파일을 첨부할 수 있게끔 조금 더 진보된 형식의 프로토콜입니다. esmtp는 기존 프로토콜을 확장한 형식의 프로토콜이기 때문에 두가지 프로토콜의 큰 차이는 없습니다.
+
+## 사용법
+
+이 문서에서는 간단하게 터미널와 node어플리케이션을 활용해 이메일을 보내는 법을 알아보겠습니다. 우선 터미널의 mail 커맨드를 활용해 간단하게 email을 보내는 방법입니다.
+
+```jsx
+$ mail -s "메일 테스트" user@example.com <<< '메일 본문입니다'
+```
+
+해당 메일을 보내게 되면 사용자의 junk메일함에 메일이 오게됩니다. 이유는 발신자의 메일주소가 없기 때문인데요, 발신자의 메일 주소를 기입 하려면 이메일을 중계해서 보내주는 서비스를 이용해야 합니다. 가장 대표적인 중계 서비스로 google mail을 예로 들 수 있겠는데, 이는 node진영에서 가장 많이 사용되는 email 라이브러리인 nodemailer라는 라이브러리를 이용해 확인해보겠습니다.
+
+```jsx
+const nodemailer = require("nodemailer");
+
+async function main() {
+  // create reusable transporter object using the default SMTP transport
+  let transporter = nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: "example@google.com",
+      pass: "google_password",
+    },
+  });
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail({
+    from: '"Fred Foo 👻" <example@google.com>', // sender address
+    to: "bar@example.com, baz@example.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>", // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
+
+main().catch(console.error);
+```
+
+nodemailer문서에서 발췌한 내용을 일부 수정했습니다. 유의 깊게 보아야 할 부분은 transporter를 생성하는 부분입니다. 중계 서비스로 gmail을 생성하고 있고, 이를 활용함으로써 보내는이의 메일 주소를 기입할 수 있게 됩니다. 
+
+이를 이용하면 우리는 구글의 587포트에 이메일을 대신 전송해달라는 요청을 하게됩니다. 구글은 전달받은 내용이 smtp규격에 맞는지 확인하고 파일에대한 바이러스 체크도 진행한 후에 수신자에게 email sender를 붙혀 재 전달하게 됩니다. 이를 통해 송신하는측, 수신하는 측 모두 인증된 서비스를 사용함으로써 안전을 담보할 수 있게 됩니다.
+
+구글등 외부 서비스를 사용하기 위해선 이용하고자 하는 계정이 외부 어플리케이션에서 사용하겠다는 설정을 따로 해줘야 합니다. 구글은 유저의 인증 방법으로 아이디와 비밀번호를 확인하는데, transporter의 auth부분입니다. 자신의 비밀번호를 그대로 노출하기 보단 이메일 전송을 위한 어플리케이션 비밀번호를 설정하는것이 보안에 더 좋은데, 이는 해당 계정을 2way factor 인증을 하게되면 발급 받을 수 있습니다. 자세한 내용은 [이곳](https://support.google.com/mail/answer/7126229?visit_id=637613204680064846-876074219&hl=ko&rd=1#zippy=%2C%EC%9D%B4%EB%A9%94%EC%9D%BC-%ED%81%B4%EB%9D%BC%EC%9D%B4%EC%96%B8%ED%8A%B8%EC%97%90-%EB%A1%9C%EA%B7%B8%EC%9D%B8%ED%95%A0-%EC%88%98-%EC%97%86%EC%9D%8C)에서 확인 할 수 있습니다.
+
+## 기타 사항
+
+smtp는 푸쉬 기반의 프로토콜이기 때문에 서버에서 응답으로 어떠한 데이터를 받을 순 없습니다. 하지만 tcp기반의 프로토콜이기 때문에 커넥션은 성립하고, 문제가 생겼을 때 에러코드는 응답받을 수 있습니다.
+
+파일을 첨부해서 email을 보내게 된다면 smtp는 거쳐가는 서버에 의존해서 데이터를 보낼 수 밖에 없는데, 거쳐가는 서버가 smtp로 받는 바디 사이즈를 상이하게 설정해놓기 때문에 파일이 첨부된 이메일은 유실될 수 있습니다.
+
+![https://web.synametrics.com/resources/SynaManSmtpRelay.png](https://web.synametrics.com/resources/SynaManSmtpRelay.png)
+
+이 때문에 email에서 파일을 첨부할 땐 스토리지 서비스를 이용해서 파일의 url을 넘겨줄것을 권장하고 있습니다. email을 중계해주는 한 [사이트](https://support.smtp2go.com/hc/en-gb/articles/223087387-How-to-Speed-Up-Email-Delivery)에서는 파일의 용량이 1mb가 초과한다면 url을 이용해서 전송할것을 권장하고 있습니다.
+
+추가로 메일을 보내는것 말고 특정 서비스에서 메일과 관련된 정보를 조회할 땐 IMAP, POP3 라는 프로토콜을 사용하기도 합니다. 이는 잘 정리된 블로그가 있어서 [링크](https://blog.naver.com/lw_mailplug/221463114087)를 첨부하겠습니다.
+
+## 마치며
+
+본 글에서 정리된 내용은 극히 일부라고 생각합니다. 본글의 목적은 email을 보낼때 클라이언트와 서버가 어떻게 통신하는지, 주의할점은 무엇이 있을지에대해 간단하게 작성되어있습니다. 보다 구체적인 프로토콜의 이해는 [wiki](https://en.wikipedia.org/wiki/Simple_Mail_Transfer_Protocol)나 [RFC 8314](https://datatracker.ietf.org/doc/html/rfc8314)를 참고하면 좋을것같습니다.

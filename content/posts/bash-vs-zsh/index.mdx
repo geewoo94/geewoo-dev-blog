@@ -1,0 +1,160 @@
+---
+title: "Bash vs Zsh"
+date: 2021-03-04
+slug: "/bash-vs-zsh"
+canonicalUrl: "https://picsum.photos/1200"
+tags:
+  - Research
+---
+
+# Bash vs Zsh - 2021.03.04
+
+2021.03.04
+
+> 아래 블로그 글을 참고해 작성되었다.
+
+[Bash vs Zsh: A comparison of two command line shells (2019 Update)](https://sunlightmedia.org/bash-vs-zsh/)
+
+## Shell?
+
+두가지 shell을 비교하기 전 먼저 shell이란 뭔지부터 정의해야겠다.
+
+위키피디아에 따르면 shell은 아래와 같이 정의되어 있다.
+
+```markdown
+💡 Shell
+셸은 운영 체제 상에서
+다양한 운영 체제 기능과 서비스를 구현하는 인터페이스를 제공하는 프로그램이다.
+셸(껍데기의 영어 단어)은 사용자와 운영 체제의 내부(커널) 사이의
+인터페이스를 감싸는 층이기 때문에 그러한 이름이 붙었다.
+```
+
+따라서 shell은 크게 두가지 종류로 볼 수 있다.
+
+- **CLI** - *Command Line Interface*
+
+    가상의 터미널을 통해 사용자가 컴퓨터와 소통하는 방식을 말한다.
+
+    터미널이란 이름의 유래는 찾을수 없었지만 유추 하자면 유저와 컴퓨터의 소통 통로가 아닐까 싶다.
+
+- **GUI** - *Graphical User Interface*
+
+    유저가 시각적인 아이콘으로 컴퓨터와 소통하는 방식을 말한다.
+
+    일반적으로 CLI를 배우기엔 러닝커브가 높기 때문에 GUI가 도입되었다.
+
+Bash와 Zsh는 CLI상에서 컴퓨터와 소통하는 각각의 shell이라 볼수 있겠다.
+
+다음으로 그럼 왜 Bash와 Zsh와 같은 shell이 나왔는지 부터 알아봐야겠다.
+
+## There are many many shell...
+
+- Thompson shell
+
+    1971년 최초의 unix시스템에서 사용되었던 shell이다.
+
+    단순한 명령줄 인터프리터 였지만 여러가지 혁신적인 기능들을 도입하면서 차기 unix shell개발로 이어졌다.
+
+- Born shell - *sh*
+
+    1977년 unix버전 7의 기본 shell이었다.
+
+    Thompson shell을 대체하는 shell로써 오랜기간 사랑받았다.
+
+- C shell - *csh*
+
+    1987년 C언어를 기반으로 한 shell이라 이런 이름이 붙었다.
+
+    대표적인 기능으로 히스토리, 별명, 작업 제어가 있다.
+
+    히스토리는 많은 개발자들에게 유용한 기능으로 과거에 사용한 명령어를 반복하거나 수정하기 매우 편리하다.
+
+    하지만 초기에 버그가 많아 사용하기에 무리가 있었다고 한다.
+
+- Korn shell - *ksh*
+
+    1983년 David korn에 의해 개발된 shell이다.
+
+- tee-see-shell - *tcsh*
+
+    1983년 개발이 완성된 shell이다.
+
+    csh 기반이면서 csh와 호환되는 유닉스 셸이다.
+
+    명령 줄 완성, 명령 줄 편집 등의 기능이 포함된 csh이다.
+
+    다른 셸들과 달리 tcsh 스크립트 안에 함수를 정의할 수 없으며 사용자는 csh에서처럼 별칭(alias)을 대신 사용해야 한다.
+
+    초기 mac os x에서 사용되었으나 10.3버전 이후로(2003년) bash가 사용되어졌다.
+
+위와 같은 여러가지 shell의 후속작으로 나온게 Bash와 Zsh라 볼 수 있겠다.
+
+그럼 다음으로 Bash와 Zsh는 어떤점이 개선되어 나왔는지 알아볼 필요가 있겠다.
+
+## Bourne-again shell - *bash*
+
+1989년 발표되어 GNU 운영 체제와 리눅스, mac os x 그리고 다윈 등 운영 체제의 기본 shell로 탑재되어 광범위하게 배포되었다.
+
+이름에서 알 수 있듯이 sh(Born shell)를 대체하는 shell로 볼 수 있다.
+
+mac os에서 기본 shell로 Bash가 사용되었었다.
+
+sh, csh에서 지원하는 대부분의 명령을 그대로 쓸 수 있다.
+
+가장 큰 차이점으로는 script언어를 지원 함으로써 shell로도 자동화 작업을 할 수 있게끔 되었다.
+
+추가적인 차이점이 알고싶다면 아래 링크를 참조.
+
+[배시 (유닉스 셸)](https://ko.wikipedia.org/wiki/%EB%B0%B0%EC%8B%9C_(%EC%9C%A0%EB%8B%89%EC%8A%A4_%EC%85%B8))
+
+## Z shell - *zsh*
+
+Z shell은 bash, ksh, tcsh의 일부 기능을 포함하여 수많은 개선 사항이 갖추어진 확장형 본 셸이다.
+
+Oh My Zsh등을 통해 추가적인 플러그인을 설치 할 수도 있다.
+
+2019년 mac os catalina이후부터 mac os 기본 shell로 지정되어져있다.
+
+zsh는 bash를 확장해 만들어졌고 mac의 기본 shell이기 때문에 가장 최근 버전의 shell이라 할 수 있겠다.
+
+이제 다양한 shell을 알아보았다.
+
+무엇을 사용할지는 본인의 선택이겠지만 나라면 가장 최근 버전이고 확장성도 높은 zsh를 선택하겠다.
+
+다음으로 bash와 zsh의 공통적인 기능과 zsh만의 추가적인 기능을 알아보자.
+
+## 공통적인 기능
+
+- The z-command
+
+    자주 사용된 directory를 기억하고 빠르게 해당 디렉토리로 이동하게 해준다.
+
+    ~/src/2018/projects/newProject 와 같은 디렉토리를 사용한 적이 있다면
+
+    z newProject 라는 명령어를 사용할 수 있다.
+
+    [agkozak/zsh-z](https://github.com/agkozak/zsh-z)
+
+- Auto-completion
+
+    이동하고자 하는 디렉토리나 파일명이 있다면 앞글자만 타이핑 후 tab키를 누르면 자동 완성 된다.
+
+- Auto-correction
+
+    존재하지 않는 명령어나 디렉토리라면 shell에서 시각적으로 확인할 수 있다.
+
+- Color customization
+
+    시각적으로 terminal에서 색을 입힐수 있다.
+
+## 마무리
+
+Zsh는 가장 최근에 나온 shell이며 Bash의 기능을 확장한다.
+
+또한 Oh My Shell이라는 거대한 커뮤니티가 존재하고 확장할수 있는 플러그인또한 오픈소스로 다양하게 있다.
+
+mac os 의 기본 shell로 채택되면서 앞으로의 가능성 또한 높아보인다.
+
+이번 조사를 통해 terminal shell의 역사를 알고 용어들을 정리하는 계기가 되었다.
+
+추가적으로 shell 명령어를 조사해 강력한 기능들을 활용하고 싶다.
