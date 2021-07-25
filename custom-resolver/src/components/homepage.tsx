@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { Flex, jsx } from "theme-ui"
+import { Box, Flex, jsx } from "theme-ui"
 import { Link } from "gatsby"
 import Layout from "./layout"
 import Title from "./title"
@@ -30,7 +30,7 @@ type PostsProps = {
   [key: string]: any
 }
 
-const Homepage = ({ posts }: PostsProps) => {
+const Homepage = ({ posts, className }: PostsProps) => {
   const { basePath, blogPath } = useMinimalBlogConfig()
   const { siteTitle } = useSiteMetadata()
 
@@ -39,12 +39,14 @@ const Homepage = ({ posts }: PostsProps) => {
       <Flex sx={{ alignItems: `center`, justifyContent: `center`, mb: 20 }}>
         Web Developer
       </Flex>
-      <Title text="Latest Posts">
-        <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>Read all posts</Link>
+      <Title text='Latest Posts'>
+        <Link to={replaceSlashes(`/${basePath}/${blogPath}`)}>
+          Read all posts
+        </Link>
       </Title>
       <Listing posts={posts} showTags={false} />
     </Layout>
-  )
+  );
 }
 
 export default Homepage

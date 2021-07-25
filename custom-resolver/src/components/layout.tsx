@@ -22,6 +22,7 @@ const Layout = ({ children, className = `` }: LayoutProps) => (
         },
         img: {
           borderStyle: `none`,
+          maxWidth: '90vw'
         },
         pre: {
           fontFamily: `monospace`,
